@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Stash
 
-## Getting Started
+> Guarde o registro, entenda seu dinheiro
 
-First, run the development server:
+Aplicação minimalista de controle financeiro pessoal focada em registro sem fricção. Criado para permitir que você acompanhe seus gastos rapidamente, sem complexidade desnecessária, e ganhe consciência financeira através de resumos visuais simples.
+
+## O Problema
+
+Os aplicativos financeiros atuais criam barreiras ao invés de soluções:
+- **Complexidade excessiva**: Interfaces carregadas com funcionalidades que você nunca usa
+- **Desconfiança**: Exigem integração bancária e acesso a dados sensíveis
+- **Ansiedade**: Notificações constantes, gráficos alarmistas e linguagem negativa
+- **Fricção**: Processo lento e trabalhoso para registrar uma despesa simples
+
+## A Solução
+
+Uma experiência minimalista focada em velocidade:
+
+**3 toques para registrar um gasto:**
+1. Abrir app
+2. Inserir valor → Selecionar categoria
+3. Salvar
+
+**10 segundos ou menos** do início ao fim.
+
+## Features (MVP)
+
+### Despesas
+CRUD completo de despesas com categorização visual, busca e filtros por período/categoria.
+
+### Histórico
+Timeline cronológica agrupada por data, com resumos diários e acesso rápido via FAB.
+
+### Resumo
+Dashboard mensal com métricas essenciais: total gasto, gastos por categoria, evolução temporal e top categorias.
+
+## Stack Tecnológica
+
+### Core
+- **Next.js 16** (App Router) - Framework React com SSR
+- **TypeScript** - Type safety
+- **Tailwind CSS v4** - Styling utility-first (configurado via `@theme` no globals.css)
+
+### UI/UX
+- **Shadcn/UI** - Componentes acessíveis e customizáveis
+- **MCP Registries** - Componentes premium (@aceternity, @magicui, @motion-primitives, etc.)
+- **Lucide React** - Biblioteca de ícones (exclusivo)
+- **next-themes** - Gerenciamento de tema dark/light
+
+### Tipografia
+- **Poppins** (Google Fonts) - Font principal
+
+## Setup Rápido
+
+### Pré-requisitos
+- Node.js 18+
+- npm ou yarn
+
+### Instalação
 
 ```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/stash.git
+cd stash
+
+# Instale dependências
+npm install
+
+# Execute o servidor de desenvolvimento
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Comandos Disponíveis
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev      # Inicia servidor de desenvolvimento
+npm run build    # Build de produção
+npm start        # Inicia servidor de produção
+npm run lint     # Executa linter
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Stash** - Controle financeiro sem fricção, foco no essencial.
