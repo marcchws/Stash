@@ -195,3 +195,18 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Fix Dialog width on web */
+@layer utilities {
+  [data-slot="dialog-content"] {
+    width: calc(100% - 2rem) !important;
+    max-width: 28rem !important;
+  }
+
+  @media (min-width: 640px) {
+    [data-slot="dialog-content"] {
+      width: 28rem !important;
+      max-width: 28rem !important;
+    }
+  }
+}
