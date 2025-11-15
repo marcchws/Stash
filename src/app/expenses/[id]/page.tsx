@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,6 @@ import {
   Edit,
   Trash2,
   Calendar,
-  DollarSign,
   FileText,
   Clock,
   UtensilsCrossed,
@@ -76,15 +75,19 @@ export default function ExpenseDetailPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   // MOCK DATA - Substituir por fetching real baseado em `id`
-  const mockExpense: Expense = {
-    id: id,
-    valor: 45.9,
-    categoria: 'lazer',
-    data: new Date().toISOString().split('T')[0],
-    descricao: 'Cinema com pipoca e refrigerante',
-    criadoEm: new Date(Date.now() - 10800000).toISOString(),
-    atualizadoEm: new Date(Date.now() - 10800000).toISOString(),
-  };
+  const mockExpense: Expense = useMemo(() => {
+    // eslint-disable-next-line react-hooks/purity -- Mock data, Date.now() is acceptable here
+    const now = Date.now();
+    return {
+      id: id,
+      valor: 45.9,
+      categoria: 'lazer',
+      data: new Date(now).toISOString().split('T')[0],
+      descricao: 'Cinema com pipoca e refrigerante',
+      criadoEm: new Date(now - 10800000).toISOString(),
+      atualizadoEm: new Date(now - 10800000).toISOString(),
+    };
+  }, [id]);
 
   const categoryMeta = CATEGORIES.find((c) => c.id === mockExpense.categoria);
   const Icon = iconMap[mockExpense.categoria];

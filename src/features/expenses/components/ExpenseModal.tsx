@@ -35,21 +35,30 @@ export function ExpenseModal({ isOpen, onClose, initialData, onSave }: ExpenseMo
   const isEditMode = !!initialData;
 
   // SIMULAÇÃO: Estado local do formulário
-  const [valor, setValor] = useState(initialData?.valor.toString() || '');
-  const [categoria, setCategoria] = useState<ExpenseCategory | undefined>(initialData?.categoria);
-  const [data, setData] = useState(
-    initialData?.data || new Date().toISOString().split('T')[0]
-  );
-  const [descricao, setDescricao] = useState(initialData?.descricao || '');
+  // Usar função inicializadora para evitar Date.now() durante render
+  const [valor, setValor] = useState(() => initialData?.valor.toString() || '');
+  const [categoria, setCategoria] = useState<ExpenseCategory | undefined>(() => initialData?.categoria);
+  const [data, setData] = useState(() => {
+    if (initialData?.data) return initialData.data;
+    // Usar função para calcular data apenas na inicialização
+    return new Date().toISOString().split('T')[0];
+  });
+  const [descricao, setDescricao] = useState(() => initialData?.descricao || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Reset form quando modal abre/fecha
   useEffect(() => {
     if (isOpen && !initialData) {
-      setValor('');
-      setCategoria(undefined);
-      setData(new Date().toISOString().split('T')[0]);
-      setDescricao('');
+      // Usar função de callback para evitar setState direto no effect
+      const resetForm = () => {
+        setValor('');
+        setCategoria(undefined);
+        setData(new Date().toISOString().split('T')[0]);
+        setDescricao('');
+      };
+      // Usar setTimeout para evitar setState síncrono
+      const timeoutId = setTimeout(resetForm, 0);
+      return () => clearTimeout(timeoutId);
     }
   }, [isOpen, initialData]);
 

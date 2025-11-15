@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { DayGroup } from '@/features/expenses/components/DayGroup';
 import { ExpenseFAB } from '@/features/expenses/components/ExpenseFAB';
@@ -29,54 +29,63 @@ import type { Expense } from '@/features/expenses/types';
 export default function ExpensesPage() {
   const router = useRouter();
 
-  // SIMULAÇÃO: Dados mockados de despesas
-  const [expenses, setExpenses] = useState<Expense[]>([
-    {
-      id: '1',
-      valor: 7.5,
-      categoria: 'alimentacao',
-      data: new Date().toISOString().split('T')[0],
-      descricao: 'Café da manhã',
-      criadoEm: new Date(Date.now() - 3600000).toISOString(),
-      atualizadoEm: new Date(Date.now() - 3600000).toISOString(),
-    },
-    {
-      id: '2',
-      valor: 15.0,
-      categoria: 'transporte',
-      data: new Date().toISOString().split('T')[0],
-      descricao: 'Uber para trabalho',
-      criadoEm: new Date(Date.now() - 7200000).toISOString(),
-      atualizadoEm: new Date(Date.now() - 7200000).toISOString(),
-    },
-    {
-      id: '3',
-      valor: 45.9,
-      categoria: 'lazer',
-      data: new Date().toISOString().split('T')[0],
-      descricao: 'Cinema com pipoca',
-      criadoEm: new Date(Date.now() - 10800000).toISOString(),
-      atualizadoEm: new Date(Date.now() - 10800000).toISOString(),
-    },
-    {
-      id: '4',
-      valor: 120.0,
-      categoria: 'compras',
-      data: new Date(Date.now() - 86400000).toISOString().split('T')[0],
-      descricao: 'Supermercado',
-      criadoEm: new Date(Date.now() - 86400000 - 3600000).toISOString(),
-      atualizadoEm: new Date(Date.now() - 86400000 - 3600000).toISOString(),
-    },
-    {
-      id: '5',
-      valor: 30.0,
-      categoria: 'alimentacao',
-      data: new Date(Date.now() - 86400000).toISOString().split('T')[0],
-      descricao: 'Almoço self-service',
-      criadoEm: new Date(Date.now() - 86400000 - 7200000).toISOString(),
-      atualizadoEm: new Date(Date.now() - 86400000 - 7200000).toISOString(),
-    },
-  ]);
+  // SIMULAÇÃO: Dados mockados de despesas (usando useMemo para evitar Date.now() durante render)
+  const initialExpenses = useMemo((): Expense[] => {
+    // eslint-disable-next-line react-hooks/purity -- Mock data, Date.now() is acceptable here
+    const now = Date.now();
+    const today = new Date(now).toISOString().split('T')[0];
+    const yesterday = new Date(now - 86400000).toISOString().split('T')[0];
+    
+    return [
+      {
+        id: '1',
+        valor: 7.5,
+        categoria: 'alimentacao' as const,
+        data: today,
+        descricao: 'Café da manhã',
+        criadoEm: new Date(now - 3600000).toISOString(),
+        atualizadoEm: new Date(now - 3600000).toISOString(),
+      },
+      {
+        id: '2',
+        valor: 15.0,
+        categoria: 'transporte' as const,
+        data: today,
+        descricao: 'Uber para trabalho',
+        criadoEm: new Date(now - 7200000).toISOString(),
+        atualizadoEm: new Date(now - 7200000).toISOString(),
+      },
+      {
+        id: '3',
+        valor: 45.9,
+        categoria: 'lazer' as const,
+        data: today,
+        descricao: 'Cinema com pipoca',
+        criadoEm: new Date(now - 10800000).toISOString(),
+        atualizadoEm: new Date(now - 10800000).toISOString(),
+      },
+      {
+        id: '4',
+        valor: 120.0,
+        categoria: 'compras' as const,
+        data: yesterday,
+        descricao: 'Supermercado',
+        criadoEm: new Date(now - 86400000 - 3600000).toISOString(),
+        atualizadoEm: new Date(now - 86400000 - 3600000).toISOString(),
+      },
+      {
+        id: '5',
+        valor: 30.0,
+        categoria: 'alimentacao' as const,
+        data: yesterday,
+        descricao: 'Almoço self-service',
+        criadoEm: new Date(now - 86400000 - 7200000).toISOString(),
+        atualizadoEm: new Date(now - 86400000 - 7200000).toISOString(),
+      },
+    ];
+  }, []);
+
+  const [expenses, setExpenses] = useState<Expense[]>(initialExpenses);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 

@@ -23,8 +23,8 @@ export type AnimatedGroupProps = {
     item?: Variants;
   };
   preset?: PresetType;
-  as?: React.ElementType;
-  asChild?: React.ElementType;
+  as?: string | React.ComponentType;
+  asChild?: string | React.ComponentType;
 };
 
 const defaultContainerVariants: Variants = {
@@ -115,16 +115,25 @@ function AnimatedGroup({
   const containerVariants = variants?.container || selectedVariants.container;
   const itemVariants = variants?.item || selectedVariants.item;
 
-  const MotionComponent = React.useMemo(
-    () => motion.create(as as keyof JSX.IntrinsicElements),
-    [as]
-  );
-  const MotionChild = React.useMemo(
-    () => motion.create(asChild as keyof JSX.IntrinsicElements),
-    [asChild]
-  );
+  const MotionComponent = React.useMemo(() => {
+    if (typeof as === 'string') {
+      const elementName: string = as;
+      // @ts-expect-error - motion.create accepts string but TypeScript infers wrong type
+      return motion.create(elementName as keyof JSX.IntrinsicElements);
+    }
+    return motion.create('div');
+  }, [as]);
+  const MotionChild = React.useMemo(() => {
+    if (typeof asChild === 'string') {
+      const elementName: string = asChild;
+      // @ts-expect-error - motion.create accepts string but TypeScript infers wrong type
+      return motion.create(elementName as keyof JSX.IntrinsicElements);
+    }
+    return motion.create('div');
+  }, [asChild]);
 
   return (
+    // eslint-disable-next-line react-hooks/static-components -- Dynamic component creation is required for this animation component
     <MotionComponent
       initial='hidden'
       animate='visible'

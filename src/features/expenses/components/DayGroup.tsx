@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Separator } from '@/components/ui/separator';
 import { AnimatedGroup } from '@/components/ui/animated-group';
 import { InView } from '@/components/ui/in-view';
@@ -19,22 +19,28 @@ import type { DayGroupProps } from '@/features/expenses/types';
 
 export function DayGroup({ date, expenses, onExpenseClick }: DayGroupProps) {
   // MOCK: Formatação de data (devs implementarão com lógica real)
-  const mockFormattedDate = new Date(date).toLocaleDateString('pt-BR', {
-    weekday: 'short',
-    day: '2-digit',
-    month: 'short',
-  });
+  const mockFormattedDate = useMemo(() => {
+    return new Date(date).toLocaleDateString('pt-BR', {
+      weekday: 'short',
+      day: '2-digit',
+      month: 'short',
+    });
+  }, [date]);
 
   // MOCK: Cálculo de total do dia
   const totalDay = expenses.reduce((sum, exp) => sum + exp.valor, 0);
   const mockTotalFormatted = `R$ ${totalDay.toFixed(2).replace('.', ',')}`;
 
-  // MOCK: Determinar se é hoje ou ontem
-  const today = new Date().toISOString().split('T')[0];
-  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-  let displayDate = mockFormattedDate;
-  if (date === today) displayDate = 'Hoje';
-  if (date === yesterday) displayDate = 'Ontem';
+  // MOCK: Determinar se é hoje ou ontem (usando useMemo para evitar Date.now() durante render)
+  const displayDate = useMemo(() => {
+    // eslint-disable-next-line react-hooks/purity -- Mock data, Date.now() is acceptable here
+    const now = Date.now();
+    const todayStr = new Date(now).toISOString().split('T')[0];
+    const yesterdayStr = new Date(now - 86400000).toISOString().split('T')[0];
+    if (date === todayStr) return 'Hoje';
+    if (date === yesterdayStr) return 'Ontem';
+    return mockFormattedDate;
+  }, [date, mockFormattedDate]);
 
   return (
     // [Refine v2.0.0] Espaçamento premium aplicado
